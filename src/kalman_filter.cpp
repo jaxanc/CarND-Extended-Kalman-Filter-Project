@@ -49,11 +49,6 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-    /**
-     TODO:
-     * update the state by using Extended Kalman Filter equations
-     */
-
     // Calculate the difference betweent he prediction and the measurment values
     float px = x_[0];
     float py = x_[1];
@@ -61,7 +56,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     float vy = x_[3];
     
     float c1 = sqrtf(px*px + py*py);
-    // Get Normalised Angle
     float c2 = atan2(py,px);
 
     // If the signs differ, change the sign of the prediction
@@ -78,8 +72,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     MatrixXd Ht = H_.transpose();
     MatrixXd S = H_ * P_ * Ht + R_;
     MatrixXd Si = S.inverse();
-    MatrixXd PHt = P_ * Ht;
-    MatrixXd K = PHt * Si;
+    MatrixXd K = P_ * Ht * Si;
     
     x_ = x_ + K*y;
     long x_size = x_.size();
